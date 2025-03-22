@@ -1,0 +1,24 @@
+{
+    "name": "API Plugins",
+    "description": "API Plugins for M365 Copilot Extensibility",
+    "tags": [
+        "sebastienlevert",
+        "api",
+        "plugins",
+        "tasks",
+        "to-do"
+    ],
+    "apis": [
+        {
+            "name": "Tasks via Microsoft Graph",
+            "description": "Tasks via Microsoft Graph",
+            "baseUrl": "https://graph.microsoft.com",
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "tasks.yaml"
+                }
+            ]
+        }
+    ]
+  }

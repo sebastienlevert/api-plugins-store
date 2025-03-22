@@ -1,0 +1,100 @@
+openapi: 3.0.4
+info:
+  title: Tasks via Microsoft Graph API - Subset
+  version: 0.0.0
+  x-ai-description: Manage all aspects of personal tasks using the Microsoft Graph API
+servers:
+  - url: https://graph.microsoft.com/v1.0
+    description: Microsoft Graph API
+paths:
+  /me/todo/lists:
+    get:
+      description: Get all todo lists
+      operationId: GetLists
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+        - GraphAuth:
+            - Tasks.ReadWrite
+  '/me/todo/lists/{listId}/tasks':
+    get:
+      description: Get all tasks in a list
+      operationId: GetTasks
+      parameters:
+        - name: listId
+          in: path
+          description: 'The ID of the list. If you don''t know the ''id'', use the GetLists operation to get the full details of the lists, including the ''id''.'
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+        - GraphAuth:
+            - Tasks.ReadWrite
+    post:
+      description: Create a new task in a list
+      operationId: CreateTask
+      parameters:
+        - name: listId
+          in: path
+          description: 'The ID of the list. If you don''t know the ''id'', use the GetLists operation to get the full details of the lists, including the ''id''.'
+          required: true
+          schema:
+            type: string
+      requestBody:
+        description: The task to create. The entire request body is the task object.
+        content:
+          application/json:
+            schema:
+              required:
+                - id
+                - title
+                - importance
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: Do not include this field when creating a new task
+                title:
+                  type: string
+                importance:
+                  enum:
+                    - low
+                    - normal
+                    - high
+                  type: string
+                  default: normal
+        required: true
+      responses:
+        '200':
+          description: The created task
+          content:
+            text/plain:
+              schema:
+                type: string
+      security:
+        - GraphAuth:
+            - Tasks.ReadWrite
+components:
+  securitySchemes:
+    GraphAuth:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize
+          tokenUrl: https://login.microsoftonline.com/organizations/oauth2/v2.0/token
+          refreshUrl: https://login.microsoftonline.com/organizations/oauth2/v2.0/token
+          scopes:
+            Tasks.ReadWrite: ''
+      x-ai-auth-reference-id: N2ViY2Y1N2QtMDU5YS00ZDg5LTgyZGMtYTAxY2U4MTI1MWMyIyM0Mzk0YjhlMy02OTM3LTRmYzUtYWY0MC1lNDVmZGU5MmUxYmE=
