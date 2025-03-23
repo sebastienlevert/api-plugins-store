@@ -1,0 +1,98 @@
+openapi: 3.0.1
+info:
+  title: Dungeon Master's Guide - Subset
+  description: API for searching for spells
+  version: 0.0.0
+  x-ai-description: Search for spells by school and level
+servers:
+  - url: https://www.dnd5eapi.co
+    description: Dnd Spells API
+paths:
+  /api/monsters:
+    get:
+      description: Search for monsters by challenge level
+      operationId: SearchMonsters
+      parameters:
+        - name: challenge_rating
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: string
+      x-ai-responding-instructions:
+        - 'Show the results in a markdown table with the following columns: name, challenge rating.'
+        - 'After displaying the results, provide a summary of the number of monsters found.'
+  '/api/monsters/{index}':
+    get:
+      description: Get monster by index
+      operationId: getMonster
+      parameters:
+        - name: index
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: string
+  /api/spells:
+    get:
+      description: Search for spells by school and level
+      operationId: SearchSpells
+      parameters:
+        - name: school
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: level
+          in: query
+          style: form
+          explode: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: string
+      x-ai-reasoning-instructions:
+        - Use the appropriate Dungeons and Dragons schools and levels terminology to provide parameters to the SearchSpells operation.
+      x-ai-responding-instructions:
+        - 'Show the results in a markdown table with the following columns: name, level, school.'
+        - 'When displaying results that contain schools, for Evocation use this emoticon 🤡. for Transmutation use this emoticon 🐦‍🔥'
+        - 'Do not augment the results beyond what is returned from the API            '
+  '/api/spells/{index}':
+    get:
+      description: Get spell by index
+      operationId: getSpell
+      parameters:
+        - name: index
+          in: path
+          required: true
+          style: simple
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: string
+components: { }

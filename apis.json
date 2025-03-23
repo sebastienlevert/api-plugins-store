@@ -30,6 +30,17 @@
                     "url": "nasa-close-approach.yaml"
                 }
             ]
+        },
+        {
+            "name": "Dungeons & Dragons Spells",
+            "description": "Dungeons & Dragons Spells",
+            "baseUrl": "https://www.dnd5eapi.co",
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "dnd-spells.yaml"
+                }
+            ]
         }
     ]
   }
