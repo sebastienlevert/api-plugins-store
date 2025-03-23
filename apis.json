@@ -19,6 +19,17 @@
                     "url": "tasks.yaml"
                 }
             ]
+        },
+        {
+            "name": "NASA Close-Approach Data",
+            "description": "NASA Close-Approach Data",
+            "baseUrl": "https://ssd-api.jpl.nasa.gov",
+            "properties": [
+                {
+                    "type": "x-openapi",
+                    "url": "nasa-close-approach.yaml"
+                }
+            ]
         }
     ]
   }

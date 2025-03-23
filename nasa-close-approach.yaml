@@ -1,0 +1,109 @@
+openapi: 3.0.4
+info:
+  title: Asteroids Agent - Subset
+  description: Asteroid Data API
+  version: 0.0.0
+  x-ai-description: 'This API provides access to current close-approach data for all asteroids and comets in JPL''s SBDB (Small-Body DataBase). Defaults for query parameters are setup for a typical CNEOS web-site search: NEO Earth close-approaches less than 0.05 au in the next 60 days sorted by date.'
+servers:
+  - url: https://ssd-api.jpl.nasa.gov
+    description: SBDB Close-Approach Data API
+paths:
+  /cad.api:
+    get:
+      description: Get asteroid or comet coming closest to earth today
+      operationId: GetClosest
+      parameters:
+        - name: limit
+          in: query
+          description: Limit data to the first N results (where N is the specified number and must be an integer value greater than zero); also output total available matching records.
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            default: '1'
+        - name: sort
+          in: query
+          description: 'sort data on the specified field: “date”, “dist”, “dist-min”, “v-inf”, “v-rel”, “h”, or “object” (default sort order is ascending: prepend “-“ for descending)'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            default: dist
+        - name: date-min
+          in: query
+          description: Exclude data earlier than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss or now for the current date. Default is "now".
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: date-max
+          in: query
+          description: Exclude data later than this date YYYY-MM-DD or date/time YYYY-MM-DDThh:mm:ss or now for the current date or +D for “D” days after now (“D” must not be greater than 36525). Default for today's data is "+1"
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+        - name: dist-max
+          in: query
+          description: 'Exclude data with an approach distance greater than this, e.g., 0.05, 10LD (default units: au).'
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            default: '0.05'
+        - name: diameter
+          in: query
+          description: include known diameter and diameter_sigma values
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            default: 'true'
+        - name: fullname
+          in: query
+          description: include the full-format object name/designation
+          required: true
+          style: form
+          explode: false
+          schema:
+            type: string
+            default: 'true'
+      responses:
+        '200':
+          description: The request has succeeded.
+          content:
+            application/json:
+              schema:
+                type: string
+      x-ai-responding-instructions:
+        - 'Do not confuse the ''des'' property value, also known as the numerical designation, '
+        - '    with the ''fullname'' property value which is the full designation and contains '
+        - '    the provisional designation which is part of the fullname.'
+        - 'In the output, '
+        - '    display and label the ''des'' property value as the numerical designation of the closest asteroid or comet.'
+        - '    If it exists, show the ''fullname'' property value and label it as the full name.'
+        - '    Show the date and time the asteroid will pass earth in UTC and the user''s time zone,'
+        - '    list the speed of the comet in km/s and mph,'
+        - '    and the distance in AU, kilometers, and miles from earth.'
+        - 'If no data is returned, state that no asteroids or comets will pass or have passed '
+        - '    (depending if dates are future or past) within 0.05 AUs and ask if the user would like to '
+        - '    increase the limit.'
+      x-ai-reasoning-instructions:
+        - 'Use the appropriate API endpoint to get the closest asteroid or comet.  '
+        - 'Set limit parameter to 1. '
+        - 'If the ask is to find closest within a number of days, set ''date-max'' to that number.  '
+        - 'If the ask is to find the closest with in a range or on a specific date, '
+        - '    set date-min and date-max to the date range, but convert the dates in to YYYY-MM-DD date format.'
+        - 'The values for date-min and date-max should never be the same. If they are the same, increase date-max by 1 day.'
+        - 'By default, sort by distance by setting "sort" parameter to value of ''dist'', '
+        - '    but sorting by value ''date'' is another acceptable option if the user requests it.  '
+        - 'If the user adds a minimum AU, set the ''dist-max'' parameter to the specified value.  '
+        - '    Otherwise, set ''dist-max'' parameter to ''0.05''.'
+        - Request the diameter and fullname by setting both parameters to true.
+components: { }
